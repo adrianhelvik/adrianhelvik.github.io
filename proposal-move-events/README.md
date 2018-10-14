@@ -7,13 +7,14 @@ list them here. So I'll fix them instead.
 # Usage
 
 ```javascript
-element.onmove = class Move {
+element.moveHandler = class Move {
   onStart(event) {
-    this.startEvent = event
+    event.preventDefault()
     this.snapshot = document.createSnapshot(this.element)
+    this.element.style.opacity = 0
     this.snapshot.place({
-      x: this.snapshotX,
-      y: this.snapshotY,
+      x: event.snapshotX,
+      y: event.snapshotY
     })
   }
 
@@ -24,18 +25,15 @@ element.onmove = class Move {
     })
   }
 
-  onEnd() {
-    this.snapshot.move({
-      x: this.startEvent.snapshotX,
-      y: this.startEvent.snapshotY,
-      transition: 300,
-    })
-    setTimeout(() => {
-      this.snapshot.remove()
-    }, 300)
+  onEnd(event) {
+    this.element.style.opacity = 1
+    this.snapshot.remove()
   }
 }
 ```
+
+Live example:
+https://adrianhelvik.github.io/proposal-move-events
 
 ## No proper move events
 
